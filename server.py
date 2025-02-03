@@ -8,11 +8,14 @@ def sent_detector():
     text_to_analyze = request.args.get('textToAnalyze')
     response = emotion_detector(text_to_analyze)
     
-    return """
-            For the given statement, the system response is 
-            'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}.
-            The dominant emotion is <b>{dominant_emotion}</b>.
-           """.format_map(response)
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!"
+    else:
+        return """
+                For the given statement, the system response is 
+                'anger': {anger}, 'disgust': {disgust}, 'fear': {fear}, 'joy': {joy} and 'sadness': {sadness}.
+                The dominant emotion is <b>{dominant_emotion}</b>.
+               """.format_map(response)
 
 @app.route("/")
 def render_index_page():
